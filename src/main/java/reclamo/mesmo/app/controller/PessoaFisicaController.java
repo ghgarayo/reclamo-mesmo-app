@@ -8,22 +8,18 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import reclamo.mesmo.app.domain.pessoa.PessoaFisica;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaList;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRequest;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaResponse;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
-import reclamo.mesmo.app.repository.PessoaFisicaRepository;
 import reclamo.mesmo.app.service.PessoaFisicaService;
 
 @RestController
 @RequestMapping("/pessoa-fisica")
 public class PessoaFisicaController {
-    @Autowired
-    private PessoaFisicaService service;
 
     @Autowired
-    private PessoaFisicaRepository repository;
+    private PessoaFisicaService service;
 
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid DTOPessoaFisicaRequest dto,
@@ -46,26 +42,13 @@ public class PessoaFisicaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<DTOPessoaFisicaResponse> update(@PathVariable String id,
-                                                          @RequestBody @Valid DTOPessoaFisicaUpdateRequest request) {
-        var pessoaFisica = repository.findById(id).orElse(null);
-        if (pessoaFisica == null) {
-            return ResponseEntity.notFound().build();
-        }
-        pessoaFisica.update(request);
-        repository.save(pessoaFisica);
-
-        return ResponseEntity.ok(new DTOPessoaFisicaResponse(pessoaFisica));
+                                                          @RequestBody @Valid DTOPessoaFisicaUpdateRequest dto) {
+        return ResponseEntity.ok(service.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable String id) {
-        var pessoaFisica = repository.findById(id).orElse(null);
-        if (pessoaFisica == null) {
-            return ResponseEntity.notFound().build();
-        }
-        pessoaFisica.inativar();
-        repository.save(pessoaFisica);
-
+        service.inactivate(id);
         return ResponseEntity.noContent().build();
     }
 
