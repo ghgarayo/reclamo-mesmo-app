@@ -14,47 +14,39 @@ import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRequest;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaResponse;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
 import reclamo.mesmo.app.repository.PessoaFisicaRepository;
+import reclamo.mesmo.app.service.PessoaFisicaService;
 
 @RestController
 @RequestMapping("/pessoa-fisica")
 public class PessoaFisicaController {
+    @Autowired
+    private PessoaFisicaService service;
 
     @Autowired
     private PessoaFisicaRepository repository;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid DTOPessoaFisicaRequest request,
+    public ResponseEntity create(@RequestBody @Valid DTOPessoaFisicaRequest dto,
                                  UriComponentsBuilder uriBuilder) {
+        var DTOpessoaFisica = service.register(dto);
+        var uri = uriBuilder.path("/pessoa-fisica/{id}").buildAndExpand(DTOpessoaFisica.id()).toUri();
 
-        var pessoaFisica = new PessoaFisica(request);
-        repository.save(pessoaFisica);
-        var uri = uriBuilder.path("/pessoa-fisica/{id}").buildAndExpand(pessoaFisica.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DTOPessoaFisicaResponse(pessoaFisica));
+        return ResponseEntity.created(uri).body(DTOpessoaFisica);
     }
 
     @GetMapping
-    public ResponseEntity<Page<DTOPessoaFisicaList>> readAll(
-            @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
-
-        var page = repository.findAllByIsActiveTrue(pageable).map(DTOPessoaFisicaList::new);
-
-        return ResponseEntity.ok(page);
+    public ResponseEntity<Page<DTOPessoaFisicaList>> readAll(@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+        return ResponseEntity.ok(service.readAll(pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DTOPessoaFisicaResponse> readById(@PathVariable String id) {
-        var pessoaFisica = repository.findById(id).orElse(null);
-        if (pessoaFisica == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(new DTOPessoaFisicaResponse(pessoaFisica));
+        return ResponseEntity.ok(service.readById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<DTOPessoaFisicaResponse> update(@PathVariable String id,
-                                                           @RequestBody @Valid DTOPessoaFisicaUpdateRequest request) {
+                                                          @RequestBody @Valid DTOPessoaFisicaUpdateRequest request) {
         var pessoaFisica = repository.findById(id).orElse(null);
         if (pessoaFisica == null) {
             return ResponseEntity.notFound().build();

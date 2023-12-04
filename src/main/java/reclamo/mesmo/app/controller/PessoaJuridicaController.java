@@ -45,11 +45,7 @@ public class PessoaJuridicaController {
     @GetMapping("/{id}")
     public ResponseEntity<DTOPessoaJuridicaResponse> readById(@PathVariable String id) {
         var pessoaJuridica = repository.findById(id).orElse(null);
-        if (pessoaJuridica == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(new DTOPessoaJuridicaResponse(pessoaJuridica));
+          return ResponseEntity.ok(new DTOPessoaJuridicaResponse(pessoaJuridica));
     }
 
     @PutMapping("/{id}")

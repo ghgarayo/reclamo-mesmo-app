@@ -10,8 +10,8 @@ public record DTOPessoaJuridicaRequest(
         @NotBlank
         String razaoSocial,
         @NotBlank
-        @Pattern(regexp = "\\d{11}")
-        String cpnj,
+        @Pattern(regexp = "\\d{14}")
+        String cnpj,
         @NotBlank
         @Email
         String email,

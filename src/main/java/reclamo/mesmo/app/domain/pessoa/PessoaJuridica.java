@@ -35,7 +35,7 @@ public class PessoaJuridica {
     public PessoaJuridica(DTOPessoaJuridicaRequest data) {
         this.id = java.util.UUID.randomUUID().toString();
         this.razaoSocial = data.razaoSocial();
-        this.cnpj = data.cpnj();
+        this.cnpj = data.cnpj();
         this.email = data.email();
         this.senha = data.senha();
         this.telefone = data.telefone();
