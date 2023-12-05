@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.domain.pessoa.PessoaFisica;
+import reclamo.mesmo.app.domain.usuario.Usuario;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaList;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRequest;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaResponse;
@@ -17,7 +18,6 @@ public class PessoaFisicaService {
 
     @Autowired
     private PessoaFisicaRepository pessoaFisicaRepository;
-
     @Autowired
     private UsuarioService usuarioService;
 
