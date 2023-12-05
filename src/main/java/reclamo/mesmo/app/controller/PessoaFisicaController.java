@@ -15,14 +15,14 @@ import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
 import reclamo.mesmo.app.service.PessoaFisicaService;
 
 @RestController
-@RequestMapping("/pessoa-fisica")
+@RequestMapping("/api/pessoa-fisica")
 public class PessoaFisicaController {
 
     @Autowired
     private PessoaFisicaService service;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid DTOPessoaFisicaRequest dto,
+    public ResponseEntity<DTOPessoaFisicaResponse> create(@RequestBody @Valid DTOPessoaFisicaRequest dto,
                                  UriComponentsBuilder uriBuilder) {
         var DTOpessoaFisica = service.register(dto);
         var uri = uriBuilder.path("/pessoa-fisica/{id}").buildAndExpand(DTOpessoaFisica.id()).toUri();
@@ -32,23 +32,30 @@ public class PessoaFisicaController {
 
     @GetMapping
     public ResponseEntity<Page<DTOPessoaFisicaList>> readAll(@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
-        return ResponseEntity.ok(service.readAll(pageable));
+        var DTOpessoaFisicaList = service.readAll(pageable);
+        
+        return ResponseEntity.ok().body(DTOpessoaFisicaList);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DTOPessoaFisicaResponse> readById(@PathVariable String id) {
-        return ResponseEntity.ok(service.readById(id));
+        var DTOPessoaFisicaDetailed = service.readById(id);
+
+        return ResponseEntity.ok().body(DTOPessoaFisicaDetailed);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<DTOPessoaFisicaResponse> update(@PathVariable String id,
                                                           @RequestBody @Valid DTOPessoaFisicaUpdateRequest dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        var DTOpessoaFisicaUpdated = service.update(id, dto);
+
+        return ResponseEntity.ok().body(DTOpessoaFisicaUpdated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         service.inactivate(id);
+
         return ResponseEntity.noContent().build();
     }
 

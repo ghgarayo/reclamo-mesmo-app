@@ -36,6 +36,7 @@ public class PessoaFisicaService {
     public DTOPessoaFisicaResponse update(String id, DTOPessoaFisicaUpdateRequest dto) {
         var pessoaFisica = repository.getReferenceById(id);
         pessoaFisica.update(dto);
+
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
