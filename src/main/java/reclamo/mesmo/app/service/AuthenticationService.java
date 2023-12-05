@@ -7,18 +7,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.repository.PessoaFisicaRepository;
 import reclamo.mesmo.app.repository.PessoaJuridicaRepository;
+import reclamo.mesmo.app.repository.UsuarioRepository;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
 
     @Autowired
-    private PessoaFisicaRepository pessoaFisicaRepository;
-
-    @Autowired
-    private PessoaJuridicaRepository pessoaJuridicaRepository;
+    private UsuarioRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return repository.findByLogin(username);
     }
 }
