@@ -7,7 +7,6 @@ public record DTOPessoaJuridicaResponse(String id,
                                         String razaoSocial,
                                         String cnpj,
                                         String telefone,
-                                        String email,
                                         Endereco endereco)  {
 
 
@@ -16,7 +15,6 @@ public record DTOPessoaJuridicaResponse(String id,
                 pessoaJuridica.getRazaoSocial(),
                 pessoaJuridica.getCnpj(),
                 pessoaJuridica.getTelefone(),
-                pessoaJuridica.getEmail(),
                 pessoaJuridica.getEndereco());
     }
 }

@@ -9,16 +9,21 @@ import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaList;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRequest;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaResponse;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdateRequest;
+import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegisterRequest;
 import reclamo.mesmo.app.repository.PessoaJuridicaRepository;
 
 @Service
 public class PessoaJuridicaService {
-
     @Autowired
     private PessoaJuridicaRepository repository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     public DTOPessoaJuridicaResponse register(DTOPessoaJuridicaRequest dto ){
-        var pessoaJuridica = new PessoaJuridica(dto);
+        var usuarioDTO = new DTOUsuarioRegisterRequest(dto.email(), dto.senha());
+        var usuario = usuarioService.register(usuarioDTO);
+        var pessoaJuridica = new PessoaJuridica(dto, usuario);
         repository.save(pessoaJuridica);
 
         return new DTOPessoaJuridicaResponse(pessoaJuridica);

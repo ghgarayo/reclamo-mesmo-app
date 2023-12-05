@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import reclamo.mesmo.app.domain.endereco.Endereco;
+import reclamo.mesmo.app.domain.usuario.Usuario;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRequest;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdateRequest;
 
@@ -20,11 +21,12 @@ public class PessoaJuridica {
 
     @Column(name = "razao_social")
     private String razaoSocial;
-
     private String cnpj;
-    private String email;
-    private String senha;
     private String telefone;
+
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     @Embedded
     private Endereco endereco;
@@ -32,32 +34,28 @@ public class PessoaJuridica {
     @Column(name = "is_active")
     private boolean isActive;
 
-    public PessoaJuridica(DTOPessoaJuridicaRequest data) {
+    public PessoaJuridica(DTOPessoaJuridicaRequest dto, Usuario usuario) {
         this.id = java.util.UUID.randomUUID().toString();
-        this.razaoSocial = data.razaoSocial();
-        this.cnpj = data.cnpj();
-        this.email = data.email();
-        this.senha = data.senha();
-        this.telefone = data.telefone();
-        this.endereco = new Endereco(data.endereco());
+        this.razaoSocial = dto.razaoSocial();
+        this.cnpj = dto.cnpj();
+        this.usuario = usuario;
+        this.telefone = dto.telefone();
+        this.endereco = new Endereco(dto.endereco());
         this.isActive = true;
     }
 
-    public void update(DTOPessoaJuridicaUpdateRequest data) {
-        if(data.razaoSocial() != null){
-            this.razaoSocial = data.razaoSocial();
+    public void update(DTOPessoaJuridicaUpdateRequest dto) {
+        if(dto.razaoSocial() != null){
+            this.razaoSocial = dto.razaoSocial();
         }
-        if(data.cpnj() != null){
-            this.cnpj = data.cpnj();
+        if(dto.cpnj() != null){
+            this.cnpj = dto.cpnj();
         }
-        if(data.email() != null){
-            this.email = data.email();
+        if(dto.telefone() != null){
+            this.telefone = dto.telefone();
         }
-        if(data.telefone() != null){
-            this.telefone = data.telefone();
-        }
-        if(data.endereco() != null){
-            this.endereco = new Endereco(data.endereco());
+        if(dto.endereco() != null){
+            this.endereco = new Endereco(dto.endereco());
         }
     }
 

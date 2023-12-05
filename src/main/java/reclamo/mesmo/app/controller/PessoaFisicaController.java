@@ -19,12 +19,12 @@ import reclamo.mesmo.app.service.PessoaFisicaService;
 public class PessoaFisicaController {
 
     @Autowired
-    private PessoaFisicaService service;
+    private PessoaFisicaService pessoaFisicaService;
 
     @PostMapping
     public ResponseEntity<DTOPessoaFisicaResponse> create(@RequestBody @Valid DTOPessoaFisicaRequest dto,
                                  UriComponentsBuilder uriBuilder) {
-        var DTOpessoaFisica = service.register(dto);
+        var DTOpessoaFisica = pessoaFisicaService.register(dto);
         var uri = uriBuilder.path("/pessoa-fisica/{id}").buildAndExpand(DTOpessoaFisica.id()).toUri();
 
         return ResponseEntity.created(uri).body(DTOpessoaFisica);
@@ -32,14 +32,14 @@ public class PessoaFisicaController {
 
     @GetMapping
     public ResponseEntity<Page<DTOPessoaFisicaList>> readAll(@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
-        var DTOpessoaFisicaList = service.readAll(pageable);
+        var DTOpessoaFisicaList = pessoaFisicaService.readAll(pageable);
         
         return ResponseEntity.ok().body(DTOpessoaFisicaList);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DTOPessoaFisicaResponse> readById(@PathVariable String id) {
-        var DTOPessoaFisicaDetailed = service.readById(id);
+        var DTOPessoaFisicaDetailed = pessoaFisicaService.readById(id);
 
         return ResponseEntity.ok().body(DTOPessoaFisicaDetailed);
     }
@@ -47,14 +47,14 @@ public class PessoaFisicaController {
     @PutMapping("/{id}")
     public ResponseEntity<DTOPessoaFisicaResponse> update(@PathVariable String id,
                                                           @RequestBody @Valid DTOPessoaFisicaUpdateRequest dto) {
-        var DTOpessoaFisicaUpdated = service.update(id, dto);
+        var DTOpessoaFisicaUpdated = pessoaFisicaService.update(id, dto);
 
         return ResponseEntity.ok().body(DTOpessoaFisicaUpdated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable String id) {
-        service.inactivate(id);
+        pessoaFisicaService.inactivate(id);
 
         return ResponseEntity.noContent().build();
     }

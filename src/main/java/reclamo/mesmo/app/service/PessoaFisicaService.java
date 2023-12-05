@@ -9,38 +9,44 @@ import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaList;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRequest;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaResponse;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
+import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegisterRequest;
 import reclamo.mesmo.app.repository.PessoaFisicaRepository;
 
 @Service
 public class PessoaFisicaService {
 
     @Autowired
-    private PessoaFisicaRepository repository;
+    private PessoaFisicaRepository pessoaFisicaRepository;
 
-    public DTOPessoaFisicaResponse register(DTOPessoaFisicaRequest dto ){
-        var pessoaFisica = new PessoaFisica(dto);
-        repository.save(pessoaFisica);
+    @Autowired
+    private UsuarioService usuarioService;
+
+    public DTOPessoaFisicaResponse register(DTOPessoaFisicaRequest dto){
+        var usuarioDTO = new DTOUsuarioRegisterRequest(dto.email(), dto.senha());
+        var usuario = usuarioService.register(usuarioDTO);
+        var pessoaFisica = new PessoaFisica(dto, usuario);
+        pessoaFisicaRepository.save(pessoaFisica);
 
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
     public Page<DTOPessoaFisicaList> readAll(Pageable pageable){
-        return repository.findAllByIsActiveTrue(pageable).map(DTOPessoaFisicaList::new);
+        return pessoaFisicaRepository.findAllByIsActiveTrue(pageable).map(DTOPessoaFisicaList::new);
     }
 
     public DTOPessoaFisicaResponse readById(String id){
-        var pessoaFisica = repository.getReferenceById(id);
+        var pessoaFisica = pessoaFisicaRepository.getReferenceById(id);
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
     public DTOPessoaFisicaResponse update(String id, DTOPessoaFisicaUpdateRequest dto) {
-        var pessoaFisica = repository.getReferenceById(id);
+        var pessoaFisica = pessoaFisicaRepository.getReferenceById(id);
         pessoaFisica.update(dto);
 
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
     public void inactivate(String id) {
-        repository.getReferenceById(id).inativar();
+        pessoaFisicaRepository.getReferenceById(id).inativar();
     }
 }
