@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaList;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRequest;
+import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRegistrationRequest;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaResponse;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdateRequest;
 import reclamo.mesmo.app.service.PessoaJuridicaService;
@@ -23,10 +23,10 @@ public class PessoaJuridicaController {
     private PessoaJuridicaService service;
 
     @PostMapping
-    public ResponseEntity<DTOPessoaJuridicaResponse> create(@RequestBody @Valid DTOPessoaJuridicaRequest request,
+    public ResponseEntity<DTOPessoaJuridicaResponse> create(@RequestBody @Valid DTOPessoaJuridicaRegistrationRequest dto,
                                  UriComponentsBuilder uriBuilder) {
 
-        var DTOPessoaJuridica = service.register(request);
+        var DTOPessoaJuridica = service.register(dto);
         var uri = uriBuilder.path("/pessoa-juridica/{id}").buildAndExpand(DTOPessoaJuridica.id()).toUri();
 
         return ResponseEntity.created(uri).body(DTOPessoaJuridica);

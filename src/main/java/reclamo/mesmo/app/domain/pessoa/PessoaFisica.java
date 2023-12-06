@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import reclamo.mesmo.app.domain.endereco.Endereco;
 import reclamo.mesmo.app.domain.usuario.Usuario;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRequest;
+import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRegistrationRequest;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
 
 import java.util.UUID;
@@ -36,7 +36,7 @@ public class PessoaFisica {
     @Column(name = "is_active")
     private boolean isActive;
 
-    public PessoaFisica(DTOPessoaFisicaRequest dados, Usuario usuario) {
+    public PessoaFisica(DTOPessoaFisicaRegistrationRequest dados, Usuario usuario) {
         this.id = UUID.randomUUID().toString();
         this.nome = dados.nome();
         this.cpf = dados.cpf();

@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import reclamo.mesmo.app.dto.endereco.DTOEnderecoRegisterRequest;
+import reclamo.mesmo.app.dto.endereco.DTOEnderecoRegistrationRequest;
 
-public record DTOPessoaJuridicaRequest(
+public record DTOPessoaJuridicaRegistrationRequest(
         @NotBlank
         String razaoSocial,
         @NotBlank
@@ -20,6 +20,6 @@ public record DTOPessoaJuridicaRequest(
         @NotBlank
         String telefone,
         @Valid
-        DTOEnderecoRegisterRequest endereco
+        DTOEnderecoRegistrationRequest endereco
 ) {
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import reclamo.mesmo.app.dto.endereco.DTOEnderecoRegisterRequest;
+import reclamo.mesmo.app.dto.endereco.DTOEnderecoRegistrationRequest;
 
 @Embeddable
 @Getter
@@ -20,7 +20,7 @@ public class Endereco {
     private String cidade;
     private String uf;
 
-    public Endereco(DTOEnderecoRegisterRequest endereco) {
+    public Endereco(DTOEnderecoRegistrationRequest endereco) {
         this.logradouro = endereco.logradouro();
         this.numero = endereco.numero();
         this.complemento = endereco.complemento();
@@ -30,7 +30,7 @@ public class Endereco {
         this.uf = endereco.uf();
     }
 
-    public void atualizar(DTOEnderecoRegisterRequest endereco) {
+    public void atualizar(DTOEnderecoRegistrationRequest endereco) {
         if(endereco.logradouro() != null){
             this.logradouro = endereco.logradouro();
         }

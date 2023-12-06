@@ -5,12 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.domain.pessoa.PessoaFisica;
-import reclamo.mesmo.app.domain.usuario.Usuario;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaList;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRequest;
+import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRegistrationRequest;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaResponse;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
-import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegisterRequest;
+import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegistrationRequest;
 import reclamo.mesmo.app.repository.PessoaFisicaRepository;
 
 @Service
@@ -18,11 +17,12 @@ public class PessoaFisicaService {
 
     @Autowired
     private PessoaFisicaRepository pessoaFisicaRepository;
+
     @Autowired
     private UsuarioService usuarioService;
 
-    public DTOPessoaFisicaResponse register(DTOPessoaFisicaRequest dto){
-        var usuarioDTO = new DTOUsuarioRegisterRequest(dto.email(), dto.senha());
+    public DTOPessoaFisicaResponse register(DTOPessoaFisicaRegistrationRequest dto){
+        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha());
         var usuario = usuarioService.register(usuarioDTO);
         var pessoaFisica = new PessoaFisica(dto, usuario);
         pessoaFisicaRepository.save(pessoaFisica);

@@ -1,10 +1,10 @@
 package reclamo.mesmo.app.dto.pessoafisica;
 
-import reclamo.mesmo.app.dto.endereco.DTOEnderecoRegisterRequest;
+import reclamo.mesmo.app.dto.endereco.DTOEnderecoRegistrationRequest;
 
 public record DTOPessoaFisicaUpdateRequest(
         String nome,
         String telefone,
         String email,
-        DTOEnderecoRegisterRequest endereco) {
+        DTOEnderecoRegistrationRequest endereco) {
 }

@@ -6,10 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.domain.pessoa.PessoaJuridica;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaList;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRequest;
+import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRegistrationRequest;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaResponse;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdateRequest;
-import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegisterRequest;
+import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegistrationRequest;
 import reclamo.mesmo.app.repository.PessoaJuridicaRepository;
 
 @Service
@@ -20,8 +20,8 @@ public class PessoaJuridicaService {
     @Autowired
     private UsuarioService usuarioService;
 
-    public DTOPessoaJuridicaResponse register(DTOPessoaJuridicaRequest dto ){
-        var usuarioDTO = new DTOUsuarioRegisterRequest(dto.email(), dto.senha());
+    public DTOPessoaJuridicaResponse register(DTOPessoaJuridicaRegistrationRequest dto ){
+        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha());
         var usuario = usuarioService.register(usuarioDTO);
         var pessoaJuridica = new PessoaJuridica(dto, usuario);
         repository.save(pessoaJuridica);
