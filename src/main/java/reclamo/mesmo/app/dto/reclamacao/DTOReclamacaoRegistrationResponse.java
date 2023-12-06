@@ -5,7 +5,7 @@ import reclamo.mesmo.app.domain.reclamacao.Reclamacao;
 public record DTOReclamacaoRegistrationResponse(
         String id,
         String usuarioReclamanteId,
-        String reclamado,
+        String cpfCnpjReclamado,
         String descricaoReclamacao,
         String dataHoraReclamacao,
         String status
@@ -14,7 +14,7 @@ public record DTOReclamacaoRegistrationResponse(
         this(
                 reclamacao.getId(),
                 reclamacao.getUsuarioReclamante().getId(),
-                reclamacao.getReclamado(),
+                reclamacao.getCpfCnpjReclamado(),
                 reclamacao.getDescricaoReclamacao(),
                 reclamacao.getDataReclamacao().toString(),
                 reclamacao.getStatusReclamacao().toString()

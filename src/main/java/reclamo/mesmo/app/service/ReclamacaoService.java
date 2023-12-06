@@ -37,17 +37,17 @@ public class ReclamacaoService {
     }
 
     public Page<DTOReclamacaoOpenedList> readAllOpened(Pageable pageable) {
-        // TODO: RECUPERAR O NOME DOS USUARIOS
+        // TODO: RECUPERAR O NOME DOS USUARIOS E ALTERAR O DTO
         return reclamacaoRepository.findAllByStatusReclamacao("ABERTA", pageable).map(DTOReclamacaoOpenedList::new);
     }
 
     public Page<DTOReclamacaoAnsweredList> readAllAnswered(Pageable pageable) {
-        //TODO: RECUPERAR O NOME DOS USUARIOS
+        //TODO: RECUPERAR O NOME DOS USUARIOS E ALTERAR O DTO
         return reclamacaoRepository.findAllByStatusReclamacao("FECHADA", pageable).map(DTOReclamacaoAnsweredList::new);
     }
 
     public Page<DTOReclamacaoClosedList> readAllClosed(Pageable pageable) {
-        //TODO: RECUPERAR O NOME DOS USUARIOS
+        //TODO: RECUPERAR O NOME DOS USUARIOS E ALTERAR O DTO
         return reclamacaoRepository.findAllByStatusReclamacao("FECHADA", pageable).map(DTOReclamacaoClosedList::new);
     }
 

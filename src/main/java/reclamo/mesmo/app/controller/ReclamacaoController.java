@@ -23,6 +23,7 @@ public class ReclamacaoController {
     @PostMapping
     public ResponseEntity<DTOReclamacaoRegistrationResponse> create(@RequestBody @Valid DTOReclamacaoRegistrationRequest dto,
                                                                     UriComponentsBuilder uriBuilder) {
+        System.out.println(dto);
         var DTOReclamacao = reclamacaoService.register(dto);
         var uri = uriBuilder.path("/reclamacao/{id}").buildAndExpand(DTOReclamacao.id()).toUri();
 

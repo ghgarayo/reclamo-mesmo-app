@@ -23,7 +23,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("API Reclamo Mesmo")
                     .withSubject(usuario.getLogin())
-                    .withClaim("id", usuario.getId())
+                    .withClaim("isAdmin", usuario.isAdmin())
                     .withExpiresAt(expirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception){

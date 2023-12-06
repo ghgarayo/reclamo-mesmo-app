@@ -26,10 +26,14 @@ public class Usuario implements UserDetails {
     private String login;
     private String senha;
 
-    public Usuario(String email, String encryptedPassword) {
+    @Column(name = "is_admin")
+    private boolean isAdmin;
+
+    public Usuario(String email, String encryptedPassword, boolean isAdmin) {
         this.id = UUID.randomUUID().toString();
         this.login = email;
         this.senha = encryptedPassword;
+        this.isAdmin = isAdmin;
     }
 
     @Override

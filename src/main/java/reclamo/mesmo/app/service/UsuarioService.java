@@ -12,12 +12,11 @@ import reclamo.mesmo.app.repository.UsuarioRepository;
 public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    private BCryptPasswordEncoder encoder;
-
-    public Usuario register(DTOUsuarioRegistrationRequest dto) {
+    public Usuario register(DTOUsuarioRegistrationRequest dto){
         var hashedPassword = encoder.encode(dto.senha());
-        var usuario = new Usuario(dto.email(), hashedPassword);
+        var usuario = new Usuario(dto.email(), hashedPassword, dto.isAdmin());
         usuarioRepository.save(usuario);
 
         return usuario;

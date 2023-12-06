@@ -22,7 +22,7 @@ public class PessoaFisicaService {
     private UsuarioService usuarioService;
 
     public DTOPessoaFisicaResponse register(DTOPessoaFisicaRegistrationRequest dto){
-        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha());
+        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha(), false);
         var usuario = usuarioService.register(usuarioDTO);
         var pessoaFisica = new PessoaFisica(dto, usuario);
         pessoaFisicaRepository.save(pessoaFisica);
@@ -31,10 +31,14 @@ public class PessoaFisicaService {
     }
 
     public Page<DTOPessoaFisicaList> readAll(Pageable pageable){
+        //TODO: ALTERAR PARA QUE RETORNE O EMAIL DOS USUÁRIOS OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
+
         return pessoaFisicaRepository.findAllByIsActiveTrue(pageable).map(DTOPessoaFisicaList::new);
     }
 
     public DTOPessoaFisicaResponse readById(String id){
+        //TODO: ALTERAR PARA QUE RETORNE OS DADOS DO USUARIO(EMAIL E SE É ADMINISTRADOR) OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
+
         var pessoaFisica = pessoaFisicaRepository.getReferenceById(id);
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }

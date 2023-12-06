@@ -18,7 +18,7 @@ public class AdministradorService {
     private UsuarioService usuarioService;
 
     public DTOAdministradorRegistrationResponse register(DTOAdministradorRegistrationRequest dto){
-        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha());
+        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha(), true);
         var usuario = usuarioService.register(usuarioDTO);
         var administrador = new Administrador(dto, usuario);
         administradorRepository.save(administrador);

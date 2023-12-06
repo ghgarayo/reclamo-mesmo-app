@@ -29,7 +29,7 @@ public class Reclamacao {
     private Usuario usuarioReclamante;
 
     @Column(name = "cpf_cnpj_reclamado")
-    private String reclamado;
+    private String cpfCnpjReclamado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reclamado_usuario_id")
@@ -53,7 +53,7 @@ public class Reclamacao {
     public Reclamacao(DTOReclamacaoRegistrationRequest dto, Usuario usuarioReclamante){
         this.id = UUID.randomUUID().toString();
         this.usuarioReclamante = usuarioReclamante;
-        this.reclamado = dto.cpfCnpjReclamado();
+        this.cpfCnpjReclamado = dto.cpfCnpjReclamado();
         this.descricaoReclamacao = dto.descricaoReclamacao();
         this.dataReclamacao = LocalDateTime.now();
         this.statusReclamacao = EnumStatusReclamacao.ABERTA;

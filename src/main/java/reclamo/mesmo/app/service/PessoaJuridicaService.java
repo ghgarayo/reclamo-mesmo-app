@@ -21,7 +21,7 @@ public class PessoaJuridicaService {
     private UsuarioService usuarioService;
 
     public DTOPessoaJuridicaResponse register(DTOPessoaJuridicaRegistrationRequest dto ){
-        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha());
+        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha(), false);
         var usuario = usuarioService.register(usuarioDTO);
         var pessoaJuridica = new PessoaJuridica(dto, usuario);
         repository.save(pessoaJuridica);
@@ -30,10 +30,12 @@ public class PessoaJuridicaService {
     }
 
     public Page<DTOPessoaJuridicaList> readAll(Pageable pageable){
+        //TODO: ALTERAR PARA QUE RETORNE O EMAIL DOS USUÁRIOS OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
         return repository.findAllByIsActiveTrue(pageable).map(DTOPessoaJuridicaList::new);
     }
 
     public DTOPessoaJuridicaResponse readById(String id) {
+        //TODO: ALTERAR PARA QUE RETORNE OS DADOS DO USUARIO(EMAIL E SE É ADMINISTRADOR) OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
         var pessoaJuridica = repository.getReferenceById(id);
 
         return new DTOPessoaJuridicaResponse(pessoaJuridica);

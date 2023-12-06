@@ -21,34 +21,22 @@ public class SecurityConfiguration {
     @Autowired
     private SecurityFilter securityFilter;
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http.csrf(csrf -> csrf.disable())
-//                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(auth -> {
-//                            auth.requestMatchers(HttpMethod.POST,"/api/auth").permitAll();
-//                            auth.requestMatchers(HttpMethod.GET,"/swagger-ui.html").permitAll();
-//                            auth.requestMatchers(HttpMethod.GET,"/v3/api-docs/**").permitAll();
-//                            auth.requestMatchers(HttpMethod.GET,"/swagger-ui/**").permitAll();
-//                            auth.anyRequest().authenticated();
-//                        })
-//                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+                .authorizeHttpRequests(auth -> {
+                            auth.requestMatchers(HttpMethod.POST,"/api/auth").permitAll();
+                            auth.requestMatchers(HttpMethod.POST,"/api/pessoa-fisica").permitAll();
+                            auth.requestMatchers(HttpMethod.POST,"/api/pessoa-juridica").permitAll();
+                            auth.requestMatchers(HttpMethod.GET,"/swagger-ui.html").permitAll();
+                            auth.requestMatchers(HttpMethod.GET,"/v3/api-docs/**").permitAll();
+                            auth.requestMatchers(HttpMethod.GET,"/swagger-ui/**").permitAll();
+                            auth.anyRequest().authenticated();
+                        })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration am) throws Exception {
