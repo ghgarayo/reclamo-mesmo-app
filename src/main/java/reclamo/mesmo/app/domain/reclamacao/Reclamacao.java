@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import reclamo.mesmo.app.domain.usuario.Usuario;
 import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoRegistrationRequest;
-import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoResponseRequest;
+import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoAnswerRequest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -59,7 +59,7 @@ public class Reclamacao {
         this.statusReclamacao = EnumStatusReclamacao.ABERTA;
     }
 
-    public void responder(DTOReclamacaoResponseRequest dto, Usuario usuarioReclamado){
+    public void responder(DTOReclamacaoAnswerRequest dto, Usuario usuarioReclamado){
         this.usuarioReclamado = usuarioReclamado;
         this.descricaoResposta = dto.descricaoResposta();
         this.dataResposta = LocalDateTime.now();

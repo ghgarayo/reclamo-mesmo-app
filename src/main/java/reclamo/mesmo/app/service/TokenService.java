@@ -31,6 +31,20 @@ public class TokenService {
         }
     }
 
+    public String getSubject(String tokenJWT){
+        try {
+            var algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("API Reclamo Mesmo")
+                    .build()
+                    .verify(tokenJWT)
+                    .getSubject();
+        } catch (JWTCreationException exception){
+            throw new RuntimeException("Token JWT inválido ou expirado!");
+        }
+    }
+
+
     private Instant expirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }

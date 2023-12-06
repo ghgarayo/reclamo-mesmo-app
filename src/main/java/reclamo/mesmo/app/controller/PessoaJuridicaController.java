@@ -1,5 +1,6 @@
 package reclamo.mesmo.app.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import reclamo.mesmo.app.service.PessoaJuridicaService;
 
 @RestController
 @RequestMapping("/api/pessoa-juridica")
+@SecurityRequirement(name = "bearer-key")
 public class PessoaJuridicaController {
 
     @Autowired
