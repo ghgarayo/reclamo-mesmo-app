@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import reclamo.mesmo.app.domain.endereco.Endereco;
 import reclamo.mesmo.app.domain.usuario.Usuario;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRegistrationRequest;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
+import reclamo.mesmo.app.dto.endereco.DTOEndereco;
+
 
 import java.util.UUID;
 
@@ -36,26 +36,20 @@ public class PessoaFisica {
     @Column(name = "is_active")
     private boolean isActive;
 
-    public PessoaFisica(DTOPessoaFisicaRegistrationRequest dados, Usuario usuario) {
+    public PessoaFisica(String nome, String cpf, String telefone, Usuario usuario, DTOEndereco endereco) {
         this.id = UUID.randomUUID().toString();
-        this.nome = dados.nome();
-        this.cpf = dados.cpf();
-        this.telefone = dados.telefone();
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
         this.usuario =  usuario;
-        this.endereco = new Endereco(dados.endereco());
+        this.endereco = new Endereco(endereco);
         this.isActive = true;
     }
 
-    public void update(DTOPessoaFisicaUpdateRequest dados){
-        if(dados.nome() != null){
-            this.nome = dados.nome();
-        }
-        if(dados.telefone() != null){
-            this.telefone = dados.telefone();
-        }
-        if(dados.endereco() != null){
-            this.endereco = new Endereco(dados.endereco());
-        }
+    public void update(String nome, String telefone, DTOEndereco endereco){
+        if(nome!= null) this.nome = nome;
+        if(telefone != null) this.telefone = telefone;
+        if(endereco != null) this.endereco = new Endereco(endereco);
     }
 
     public void inativar() {

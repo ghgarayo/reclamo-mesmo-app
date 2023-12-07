@@ -7,8 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import reclamo.mesmo.app.domain.endereco.Endereco;
 import reclamo.mesmo.app.domain.usuario.Usuario;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRegistrationRequest;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdateRequest;
+import reclamo.mesmo.app.dto.endereco.DTOEndereco;
+import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRegistration;
+import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdate;
 
 @Table(name = "pessoa_juridica")
 @Entity(name = "PessoaJuridica")
@@ -34,29 +35,20 @@ public class PessoaJuridica {
     @Column(name = "is_active")
     private boolean isActive;
 
-    public PessoaJuridica(DTOPessoaJuridicaRegistrationRequest dto, Usuario usuario) {
+    public PessoaJuridica(String razaoSocial, String cnpj, String telefone, Usuario usuario, DTOEndereco endereco) {
         this.id = java.util.UUID.randomUUID().toString();
-        this.razaoSocial = dto.razaoSocial();
-        this.cnpj = dto.cnpj();
+        this.razaoSocial = razaoSocial;
+        this.cnpj = cnpj;
+        this.telefone = telefone;
         this.usuario = usuario;
-        this.telefone = dto.telefone();
-        this.endereco = new Endereco(dto.endereco());
+        this.endereco = new Endereco(endereco);
         this.isActive = true;
     }
 
-    public void update(DTOPessoaJuridicaUpdateRequest dto) {
-        if(dto.razaoSocial() != null){
-            this.razaoSocial = dto.razaoSocial();
-        }
-        if(dto.cpnj() != null){
-            this.cnpj = dto.cpnj();
-        }
-        if(dto.telefone() != null){
-            this.telefone = dto.telefone();
-        }
-        if(dto.endereco() != null){
-            this.endereco = new Endereco(dto.endereco());
-        }
+    public void update(String razaoSocial, String telefone, DTOEndereco endereco){
+        if(razaoSocial!= null) this.razaoSocial = razaoSocial;
+        if(telefone != null) this.telefone = telefone;
+        if(endereco != null) this.endereco = new Endereco(endereco);
     }
 
     public void inativar() {

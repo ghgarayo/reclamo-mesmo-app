@@ -5,11 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.domain.pessoa.PessoaJuridica;
+import reclamo.mesmo.app.dto.endereco.DTOEndereco;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaList;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRegistrationRequest;
+import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRegistration;
 import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaResponse;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdateRequest;
+import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdate;
 import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegistrationRequest;
+import reclamo.mesmo.app.infra.exception.ValidacaoException;
+import reclamo.mesmo.app.infra.util.ValidadorCnpj;
 import reclamo.mesmo.app.repository.PessoaJuridicaRepository;
 
 @Service
@@ -20,36 +23,40 @@ public class PessoaJuridicaService {
     @Autowired
     private UsuarioService usuarioService;
 
-    public DTOPessoaJuridicaResponse register(DTOPessoaJuridicaRegistrationRequest dto ){
-        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha(), false);
-        var usuario = usuarioService.register(usuarioDTO);
-        var pessoaJuridica = new PessoaJuridica(dto, usuario);
+    public DTOPessoaJuridicaResponse register(String razaoSocial, String cnpj, String email, String senha, String telefone, DTOEndereco endereco){
+
+        var isCnpjValid = ValidadorCnpj.isCNPJ(cnpj);
+
+        if(!isCnpjValid) throw new ValidacaoException("CNPJ inválido!");
+
+        var usuario = usuarioService.register(email, senha, false);
+        var pessoaJuridica = new PessoaJuridica(razaoSocial, cnpj, telefone, usuario, endereco);
         repository.save(pessoaJuridica);
 
         return new DTOPessoaJuridicaResponse(pessoaJuridica);
     }
 
     public Page<DTOPessoaJuridicaList> readAll(Pageable pageable){
-        //TODO: ALTERAR PARA QUE RETORNE O EMAIL DOS USUÁRIOS OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
         return repository.findAllByIsActiveTrue(pageable).map(DTOPessoaJuridicaList::new);
     }
 
     public DTOPessoaJuridicaResponse readById(String id) {
-        //TODO: ALTERAR PARA QUE RETORNE OS DADOS DO USUARIO(EMAIL E SE É ADMINISTRADOR) OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
         var pessoaJuridica = repository.getReferenceById(id);
-
         return new DTOPessoaJuridicaResponse(pessoaJuridica);
     }
 
+    public DTOPessoaJuridicaResponse update(String id, String razaoSocial, String telefone, DTOEndereco endereco) {
 
-    public DTOPessoaJuridicaResponse update(String id, DTOPessoaJuridicaUpdateRequest dto) {
         var pessoaJuridica = repository.getReferenceById(id);
-        pessoaJuridica.update(dto);
-
+        pessoaJuridica.update(razaoSocial, telefone, endereco);
+        repository.save(pessoaJuridica);
         return new DTOPessoaJuridicaResponse(pessoaJuridica);
     }
 
     public void inactivate(String id) {
-        repository.getReferenceById(id).inativar();
+
+        var pessoaJuridica = repository.getReferenceById(id);
+        pessoaJuridica.inativar();
+        repository.save(pessoaJuridica);
     }
 }

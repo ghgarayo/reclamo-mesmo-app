@@ -1,5 +1,6 @@
 package reclamo.mesmo.app.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping
+    @Transactional
     public ResponseEntity login(@RequestBody @Valid DTOAuthenticationRequest dto){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
         var authentication = manager.authenticate(authenticationToken);

@@ -9,4 +9,5 @@ public interface PessoaFisicaRepository extends JpaRepository<PessoaFisica, Stri
     Page<PessoaFisica> findAllByIsActiveTrue(Pageable pageable);
     PessoaFisica findByCpf(String cpf);
 
+    PessoaFisica isAdmin(String usuarioReclamanteId);
 }

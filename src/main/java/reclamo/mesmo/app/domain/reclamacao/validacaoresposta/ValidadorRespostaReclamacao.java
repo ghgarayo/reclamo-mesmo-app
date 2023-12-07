@@ -1,4 +1,4 @@
-package reclamo.mesmo.app.domain.reclamacao.validacao;
+package reclamo.mesmo.app.domain.reclamacao.validacaoresposta;
 
 import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoAnswerRequest;
 

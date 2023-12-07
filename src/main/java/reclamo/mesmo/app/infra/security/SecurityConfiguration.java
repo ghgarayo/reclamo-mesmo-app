@@ -26,14 +26,16 @@ public class SecurityConfiguration {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                            auth.requestMatchers(HttpMethod.POST,"/api/auth").permitAll();
-                            auth.requestMatchers(HttpMethod.POST,"/api/pessoa-fisica").permitAll();
-                            auth.requestMatchers(HttpMethod.POST,"/api/pessoa-juridica").permitAll();
-                            auth.requestMatchers(HttpMethod.GET,"/swagger-ui.html").permitAll();
-                            auth.requestMatchers(HttpMethod.GET,"/v3/api-docs/**").permitAll();
-                            auth.requestMatchers(HttpMethod.GET,"/swagger-ui/**").permitAll();
-                            auth.anyRequest().authenticated();
-                        })
+                    auth.requestMatchers(HttpMethod.POST, "/api/auth").permitAll();
+                    // TODO: REMOVER PERMISSÃO DE CRIAÇÃO DE ADMINISTRADOR APÓS A CRIAÇÃO DO PRIMEIRO ADMINISTRADOR
+                    auth.requestMatchers(HttpMethod.POST, "/api/admin").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/pessoa-fisica").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/pessoa-juridica").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/swagger-ui.html").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll();
+                    auth.anyRequest().authenticated();
+                })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

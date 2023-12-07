@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import reclamo.mesmo.app.domain.usuario.Usuario;
-import reclamo.mesmo.app.dto.administrador.DTOAdministradorRegistrationRequest;
+import reclamo.mesmo.app.dto.administrador.DTOAdministradorRegistration;
 
 import java.util.UUID;
 
@@ -29,9 +29,9 @@ public class Administrador {
     @Column(name = "is_active")
     private boolean isActive;
 
-    public Administrador(DTOAdministradorRegistrationRequest dto, Usuario usuario) {
+    public Administrador(String nome, Usuario usuario) {
         this.id = UUID.randomUUID().toString();
-        this.nome = dto.nome();
+        this.nome = nome;
         this.usuario = usuario;
         this.isActive = true;
     }

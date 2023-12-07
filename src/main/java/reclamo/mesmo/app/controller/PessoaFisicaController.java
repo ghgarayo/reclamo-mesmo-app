@@ -1,6 +1,7 @@
 package reclamo.mesmo.app.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaList;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRegistrationRequest;
+import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRegistration;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaResponse;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
+import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdate;
 import reclamo.mesmo.app.service.PessoaFisicaService;
 
 @SuppressWarnings("unused")
@@ -25,9 +26,16 @@ public class PessoaFisicaController {
     private PessoaFisicaService pessoaFisicaService;
 
     @PostMapping
-    public ResponseEntity<DTOPessoaFisicaResponse> create(@RequestBody @Valid DTOPessoaFisicaRegistrationRequest dto,
-            UriComponentsBuilder uriBuilder) {
-        var DTOPessoaFisica = pessoaFisicaService.register(dto);
+    @Transactional
+    public ResponseEntity<DTOPessoaFisicaResponse> create(@RequestBody @Valid DTOPessoaFisicaRegistration dto,
+                                                          UriComponentsBuilder uriBuilder) {
+        var DTOPessoaFisica = pessoaFisicaService.register(dto.nome(),
+                dto.cpf(),
+                dto.email(),
+                dto.senha(),
+                dto.telefone(),
+                dto.endereco());
+
         var uri = uriBuilder.path("/pessoa-fisica/{id}").buildAndExpand(DTOPessoaFisica.id()).toUri();
 
         return ResponseEntity.created(uri).body(DTOPessoaFisica);
@@ -49,17 +57,22 @@ public class PessoaFisicaController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<DTOPessoaFisicaResponse> update(@PathVariable String id,
-            @RequestBody @Valid DTOPessoaFisicaUpdateRequest dto) {
-        var DTOPessoaFisicaUpdated = pessoaFisicaService.update(id, dto);
+                                                          @RequestBody @Valid DTOPessoaFisicaUpdate dto) {
+
+        var DTOPessoaFisicaUpdated = pessoaFisicaService.update(id,
+                dto.nome(),
+                dto.telefone(),
+                dto.endereco());
 
         return ResponseEntity.ok().body(DTOPessoaFisicaUpdated);
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<?> delete(@PathVariable String id) {
         pessoaFisicaService.inactivate(id);
-
         return ResponseEntity.noContent().build();
     }
 

@@ -3,7 +3,7 @@ package reclamo.mesmo.app.dto.endereco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record DTOEnderecoRegistrationRequest(
+public record DTOEndereco(
         @NotBlank
         String logradouro,
         @NotBlank

@@ -15,8 +15,13 @@ public class UsuarioService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public Usuario register(DTOUsuarioRegistrationRequest dto){
-        var hashedPassword = encoder.encode(dto.senha());
-        var usuario = new Usuario(dto.email(), hashedPassword, dto.isAdmin());
+        return register(dto.email(), dto.senha(), dto.isAdmin());
+
+    }
+
+    public Usuario register(String email, String senha, boolean isAdmin){
+        var hashedPassword = encoder.encode(senha);
+        var usuario = new Usuario(email, hashedPassword, isAdmin);
         usuarioRepository.save(usuario);
 
         return usuario;

@@ -7,6 +7,8 @@ import reclamo.mesmo.app.domain.pessoa.PessoaJuridica;
 
 public interface PessoaJuridicaRepository extends JpaRepository<PessoaJuridica, String> {
     Page<PessoaJuridica> findAllByIsActiveTrue(Pageable pageable);
-
     PessoaJuridica findByCnpj(String cnpj);
+    PessoaJuridica findByUsuarioId(String usuarioId);
+
+    PessoaJuridica isAdmin(String usuarioReclamanteId);
 }

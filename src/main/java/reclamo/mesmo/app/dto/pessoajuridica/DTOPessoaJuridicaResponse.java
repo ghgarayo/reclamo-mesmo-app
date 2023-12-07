@@ -7,14 +7,18 @@ public record DTOPessoaJuridicaResponse(String id,
                                         String razaoSocial,
                                         String cnpj,
                                         String telefone,
-                                        Endereco endereco)  {
+                                        String usuarioId,
+                                        String email,
+                                        Endereco endereco) {
 
 
-    public DTOPessoaJuridicaResponse(PessoaJuridica pessoaJuridica){
+    public DTOPessoaJuridicaResponse(PessoaJuridica pessoaJuridica) {
         this(pessoaJuridica.getId(),
                 pessoaJuridica.getRazaoSocial(),
                 pessoaJuridica.getCnpj(),
                 pessoaJuridica.getTelefone(),
+                pessoaJuridica.getUsuario().getId(),
+                pessoaJuridica.getUsuario().getLogin(),
                 pessoaJuridica.getEndereco());
     }
 }

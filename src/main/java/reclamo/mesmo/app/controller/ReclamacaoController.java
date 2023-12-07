@@ -1,6 +1,7 @@
 package reclamo.mesmo.app.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,16 +22,19 @@ public class ReclamacaoController {
     private ReclamacaoService reclamacaoService;
 
     @PostMapping
-    public ResponseEntity<DTOReclamacaoRegistrationResponse> create(@RequestBody @Valid DTOReclamacaoRegistrationRequest dto,
+    @Transactional
+    public ResponseEntity<DTOReclamacaoRegistrationResponse> create(@RequestBody @Valid DTOReclamacaoRegistration dto,
                                                                     UriComponentsBuilder uriBuilder) {
-        System.out.println(dto);
-        var DTOReclamacao = reclamacaoService.register(dto);
+        var DTOReclamacao = reclamacaoService.register(dto.usuarioReclamanteId(),
+                dto.cpfCnpjReclamado(),
+                dto.descricaoReclamacao());
         var uri = uriBuilder.path("/reclamacao/{id}").buildAndExpand(DTOReclamacao.id()).toUri();
 
         return ResponseEntity.created(uri).body(DTOReclamacao);
     }
 
     @PutMapping("/answer")
+    @Transactional
     public ResponseEntity<DTOReclamacaoAnswerResponse> answer(@RequestBody @Valid DTOReclamacaoAnswerRequest dto) {
         var DTOReclamacao = reclamacaoService.answer(dto);
 
@@ -61,9 +65,10 @@ public class ReclamacaoController {
         return ResponseEntity.ok().body(DTOReclamacaoList);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> close(@PathVariable String id) {
-        reclamacaoService.close(id);
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<?> close(@RequestBody @Valid DTOReclamacaoClose dto) {
+        reclamacaoService.close(dto.idReclamacao(), dto.usuarioId());
 
         return ResponseEntity.noContent().build();
     }

@@ -5,11 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.domain.pessoa.PessoaFisica;
+import reclamo.mesmo.app.dto.endereco.DTOEndereco;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaList;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaRegistrationRequest;
 import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaResponse;
-import reclamo.mesmo.app.dto.pessoafisica.DTOPessoaFisicaUpdateRequest;
-import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegistrationRequest;
+import reclamo.mesmo.app.infra.exception.ValidacaoException;
+import reclamo.mesmo.app.infra.util.ValidadorCpf;
 import reclamo.mesmo.app.repository.PessoaFisicaRepository;
 
 @Service
@@ -21,36 +21,43 @@ public class PessoaFisicaService {
     @Autowired
     private UsuarioService usuarioService;
 
-    public DTOPessoaFisicaResponse register(DTOPessoaFisicaRegistrationRequest dto){
-        var usuarioDTO = new DTOUsuarioRegistrationRequest(dto.email(), dto.senha(), false);
-        var usuario = usuarioService.register(usuarioDTO);
-        var pessoaFisica = new PessoaFisica(dto, usuario);
+    public DTOPessoaFisicaResponse register(String nome, String cpf, String email, String senha, String telefone, DTOEndereco endereco){
+
+        var isCpfValid = ValidadorCpf.isCPF(cpf);
+
+        if(!isCpfValid) throw new ValidacaoException("CPF inválido!");
+
+        var usuario = usuarioService.register(email, senha, false);
+        var pessoaFisica = new PessoaFisica(nome, cpf, telefone, usuario, endereco);
         pessoaFisicaRepository.save(pessoaFisica);
 
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
     public Page<DTOPessoaFisicaList> readAll(Pageable pageable){
-        //TODO: ALTERAR PARA QUE RETORNE O EMAIL DOS USUÁRIOS OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
 
         return pessoaFisicaRepository.findAllByIsActiveTrue(pageable).map(DTOPessoaFisicaList::new);
     }
 
     public DTOPessoaFisicaResponse readById(String id){
-        //TODO: ALTERAR PARA QUE RETORNE OS DADOS DO USUARIO(EMAIL E SE É ADMINISTRADOR) OBS: NÃO É NECESSÁRIO RETORNAR A SENHA
-
         var pessoaFisica = pessoaFisicaRepository.getReferenceById(id);
+
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
-    public DTOPessoaFisicaResponse update(String id, DTOPessoaFisicaUpdateRequest dto) {
+    public DTOPessoaFisicaResponse update(String id, String nome, String telefone, DTOEndereco endereco){
+
         var pessoaFisica = pessoaFisicaRepository.getReferenceById(id);
-        pessoaFisica.update(dto);
+        pessoaFisica.update(nome, telefone, endereco);
+        pessoaFisicaRepository.save(pessoaFisica);
 
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
     public void inactivate(String id) {
-        pessoaFisicaRepository.getReferenceById(id).inativar();
+
+        var pessoaFisica = pessoaFisicaRepository.getReferenceById(id);
+        pessoaFisica.inativar();
+        pessoaFisicaRepository.save(pessoaFisica);
     }
 }

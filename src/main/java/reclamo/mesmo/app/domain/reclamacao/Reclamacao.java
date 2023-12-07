@@ -6,8 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import reclamo.mesmo.app.domain.administrador.Administrador;
 import reclamo.mesmo.app.domain.usuario.Usuario;
-import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoRegistrationRequest;
+import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoRegistration;
 import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoAnswerRequest;
 
 import java.time.LocalDateTime;
@@ -51,42 +52,36 @@ public class Reclamacao {
     @Enumerated(EnumType.STRING)
     private EnumStatusReclamacao statusReclamacao;
 
+    @ManyToOne
+    @JoinColumn(name = "fechado_por")
+    private Usuario administrador;
 
-    public Reclamacao(DTOReclamacaoRegistrationRequest dto, Usuario usuarioReclamante){
+    @Column(name = "nota_final")
+    private Integer notaFinal;
+
+    public Reclamacao(Usuario usuarioReclamante, String cpfCnpjReclamado, String descricaoReclamacao){
         this.id = UUID.randomUUID().toString();
         this.usuarioReclamante = usuarioReclamante;
-        this.cpfCnpjReclamado = dto.cpfCnpjReclamado();
-        this.descricaoReclamacao = dto.descricaoReclamacao();
-        this.dataReclamacao = LocalDateTime.now();
-        this.statusReclamacao = EnumStatusReclamacao.ABERTA;
-    }
-
-    public Reclamacao(DTOReclamacaoRegistrationRequest dto, Usuario usuarioReclamante, Usuario usuarioReclamado){
-        this.id = UUID.randomUUID().toString();
-        this.usuarioReclamante = usuarioReclamante;
-        this.cpfCnpjReclamado = dto.cpfCnpjReclamado();
-        this.usuarioReclamado = usuarioReclamado;
-        this.descricaoReclamacao = dto.descricaoReclamacao();
+        this.cpfCnpjReclamado = cpfCnpjReclamado;
+        this.descricaoReclamacao = descricaoReclamacao;
         this.dataReclamacao = LocalDateTime.now();
         this.statusReclamacao = EnumStatusReclamacao.ABERTA;
     }
 
     public void responder(DTOReclamacaoAnswerRequest dto, Usuario usuarioReclamado){
-        if(this.usuarioReclamado == null){
-            this.usuarioReclamado = usuarioReclamado;
-        }
-        if(this.usuarioReclamado != usuarioReclamado){
-            throw new RuntimeException("Usuário não tem permissão para responder essa reclamação");
-        }
+        this.usuarioReclamado = usuarioReclamado;
         this.descricaoResposta = dto.descricaoResposta();
         this.dataResposta = LocalDateTime.now();
         this.statusReclamacao = EnumStatusReclamacao.RESPONDIDA;
     }
 
-    public void fechar(){
+    public void fechar(Usuario administrador){
+        this.administrador = administrador;
         this.statusReclamacao = EnumStatusReclamacao.FECHADA;
     }
 
-    //TODO - AJUSTAR FINALIZAÇÃO DE RECLAMAÇÃO PARA CONTER INFORMAÇÃO DO ADMINISTRADOR QUE FINALIZOU
+    public void avaliar(String idReclamacao, Integer notaFinal){
+        this.notaFinal = notaFinal;
+    }
 
 }
