@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record DTOReclamacaoAnswerRequest(
         @NotBlank
+        String idReclamacao,
+        @NotBlank
         String usuarioReclamadoId,
         @NotBlank
         String descricaoResposta

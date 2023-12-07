@@ -24,14 +24,14 @@ public class Reclamacao {
     @Id
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "reclamante_usuario_id")
     private Usuario usuarioReclamante;
 
     @Column(name = "cpf_cnpj_reclamado")
     private String cpfCnpjReclamado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "reclamado_usuario_id")
     private Usuario usuarioReclamado;
 
@@ -48,7 +48,9 @@ public class Reclamacao {
     private LocalDateTime dataResposta;
 
     @Column(name = "status_reclamacao")
+    @Enumerated(EnumType.STRING)
     private EnumStatusReclamacao statusReclamacao;
+
 
     public Reclamacao(DTOReclamacaoRegistrationRequest dto, Usuario usuarioReclamante){
         this.id = UUID.randomUUID().toString();
@@ -59,8 +61,23 @@ public class Reclamacao {
         this.statusReclamacao = EnumStatusReclamacao.ABERTA;
     }
 
-    public void responder(DTOReclamacaoAnswerRequest dto, Usuario usuarioReclamado){
+    public Reclamacao(DTOReclamacaoRegistrationRequest dto, Usuario usuarioReclamante, Usuario usuarioReclamado){
+        this.id = UUID.randomUUID().toString();
+        this.usuarioReclamante = usuarioReclamante;
+        this.cpfCnpjReclamado = dto.cpfCnpjReclamado();
         this.usuarioReclamado = usuarioReclamado;
+        this.descricaoReclamacao = dto.descricaoReclamacao();
+        this.dataReclamacao = LocalDateTime.now();
+        this.statusReclamacao = EnumStatusReclamacao.ABERTA;
+    }
+
+    public void responder(DTOReclamacaoAnswerRequest dto, Usuario usuarioReclamado){
+        if(this.usuarioReclamado == null){
+            this.usuarioReclamado = usuarioReclamado;
+        }
+        if(this.usuarioReclamado != usuarioReclamado){
+            throw new RuntimeException("Usuário não tem permissão para responder essa reclamação");
+        }
         this.descricaoResposta = dto.descricaoResposta();
         this.dataResposta = LocalDateTime.now();
         this.statusReclamacao = EnumStatusReclamacao.RESPONDIDA;

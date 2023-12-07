@@ -1,24 +1,23 @@
 package reclamo.mesmo.app.dto.reclamacao;
 
 import reclamo.mesmo.app.domain.reclamacao.Reclamacao;
-import reclamo.mesmo.app.domain.usuario.Usuario;
 
 import java.time.LocalDateTime;
 
 public record DTOReclamacaoAnsweredList(String id,
-                                        Usuario usuarioReclamante,
+                                        String usuarioReclamante,
                                         String descricaoReclamacao,
                                         LocalDateTime dataReclamacao,
-                                        Usuario usuarioReclamado,
+                                        String usuarioReclamado,
                                         String descricaoResposta,
                                         LocalDateTime dataResposta) {
 
     public DTOReclamacaoAnsweredList(Reclamacao reclamacao){
         this(reclamacao.getId(),
-                reclamacao.getUsuarioReclamante(),
+                reclamacao.getUsuarioReclamante().getLogin(),
                 reclamacao.getDescricaoReclamacao(),
                 reclamacao.getDataReclamacao(),
-                reclamacao.getUsuarioReclamado(),
+                reclamacao.getUsuarioReclamado().getLogin(),
                 reclamacao.getDescricaoResposta(),
                 reclamacao.getDataResposta());
     }

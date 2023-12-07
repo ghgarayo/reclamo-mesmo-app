@@ -30,18 +30,16 @@ public class ReclamacaoController {
         return ResponseEntity.created(uri).body(DTOReclamacao);
     }
 
-    @PutMapping("/answer/{id}")
-    public ResponseEntity<DTOReclamacaoAnswerResponse> answer(@PathVariable String id, @RequestBody @Valid DTOReclamacaoAnswerRequest dto,
-                                                              UriComponentsBuilder uriBuilder) {
-        var DTOReclamacao = reclamacaoService.answer(id, dto);
-        var uri = uriBuilder.path("/reclamacao/{id}").buildAndExpand(DTOReclamacao.id()).toUri();
+    @PutMapping("/answer")
+    public ResponseEntity<DTOReclamacaoAnswerResponse> answer(@RequestBody @Valid DTOReclamacaoAnswerRequest dto) {
+        var DTOReclamacao = reclamacaoService.answer(dto);
 
-        return ResponseEntity.created(uri).body(DTOReclamacao);
+        return ResponseEntity.ok().body(DTOReclamacao);
     }
 
     @GetMapping("/list/opened")
     public ResponseEntity<Page<DTOReclamacaoOpenedList>> readAllOpened(
-            @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
         var DTOReclamacaoList = reclamacaoService.readAllOpened(pageable);
 
         return ResponseEntity.ok().body(DTOReclamacaoList);
@@ -49,7 +47,7 @@ public class ReclamacaoController {
 
     @GetMapping("/list/answered")
     public ResponseEntity<Page<DTOReclamacaoAnsweredList>> readAllAnswered(
-            @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
         var DTOReclamacaoList = reclamacaoService.readAllAnswered(pageable);
 
         return ResponseEntity.ok().body(DTOReclamacaoList);
@@ -57,7 +55,7 @@ public class ReclamacaoController {
 
     @GetMapping("/list/closed")
     public ResponseEntity<Page<DTOReclamacaoClosedList>> readAllClosed(
-            @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
         var DTOReclamacaoList = reclamacaoService.readAllClosed(pageable);
 
         return ResponseEntity.ok().body(DTOReclamacaoList);

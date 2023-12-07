@@ -7,4 +7,6 @@ import reclamo.mesmo.app.domain.pessoa.PessoaFisica;
 
 public interface PessoaFisicaRepository extends JpaRepository<PessoaFisica, String> {
     Page<PessoaFisica> findAllByIsActiveTrue(Pageable pageable);
+    PessoaFisica findByCpf(String cpf);
+
 }
