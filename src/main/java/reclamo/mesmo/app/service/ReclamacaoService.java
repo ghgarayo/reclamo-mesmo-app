@@ -84,7 +84,7 @@ public class ReclamacaoService {
         validadoresDeFechamentoDeReclamacao.forEach(validador -> validador.validar(idReclamacao, usuarioId));
 
         var reclamacao = reclamacaoRepository.getReferenceById(idReclamacao);
-        var administrador = usuarioRepository.findByUsuarioIdAndIsAdmin(usuarioId, true);
+        var administrador = usuarioRepository.findByIdAndIsAdmin(usuarioId, true);
 
         reclamacao.fechar(administrador);
         reclamacaoRepository.save(reclamacao);
@@ -97,7 +97,6 @@ public class ReclamacaoService {
         }
 
         validadoresDeNotaFinalReclamacao.forEach(validador -> validador.validar(idReclamacao, notaFinal));
-
         var reclamacao = reclamacaoRepository.getReferenceById(idReclamacao);
         reclamacao.avaliar(notaFinal);
         reclamacaoRepository.save(reclamacao);

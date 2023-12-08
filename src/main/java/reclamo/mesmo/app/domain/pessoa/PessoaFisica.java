@@ -53,7 +53,7 @@ public class PessoaFisica {
     }
 
     public void inativar() {
-        this.isActive = false;
+        setActive(false);
     }
 
 }

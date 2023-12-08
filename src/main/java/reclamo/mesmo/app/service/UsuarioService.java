@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.domain.usuario.Usuario;
-import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegistrationRequest;
+import reclamo.mesmo.app.dto.usuario.DTOUsuarioRegistration;
 import reclamo.mesmo.app.repository.UsuarioRepository;
 
 @Service
@@ -14,7 +14,7 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public Usuario register(DTOUsuarioRegistrationRequest dto){
+    public Usuario register(DTOUsuarioRegistration dto){
         return register(dto.email(), dto.senha(), dto.isAdmin());
 
     }

@@ -29,6 +29,7 @@ public class Usuario implements UserDetails {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+
     public Usuario(String email, String encryptedPassword, boolean isAdmin) {
         this.id = UUID.randomUUID().toString();
         this.login = email;

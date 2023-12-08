@@ -5,17 +5,17 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import reclamo.mesmo.app.domain.endereco.Endereco;
 import reclamo.mesmo.app.domain.usuario.Usuario;
 import reclamo.mesmo.app.dto.endereco.DTOEndereco;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaRegistration;
-import reclamo.mesmo.app.dto.pessoajuridica.DTOPessoaJuridicaUpdate;
 
 @Table(name = "pessoa_juridica")
 @Entity(name = "PessoaJuridica")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class PessoaJuridica {
     @Id
     private String id;

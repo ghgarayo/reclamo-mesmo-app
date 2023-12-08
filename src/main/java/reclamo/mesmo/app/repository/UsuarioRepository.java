@@ -14,7 +14,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
                FROM Usuario u
                WHERE u.id = :usuarioId AND u.isAdmin = :isAdmin
             """)
-    Usuario findByUsuarioIdAndIsAdmin(String usuarioId, boolean isAdmin);
+    Usuario findByIdAndIsAdmin(String usuarioId, boolean isAdmin);
 
     @Query("""
                 SELECT u

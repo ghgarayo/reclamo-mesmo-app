@@ -54,6 +54,7 @@ public class PessoaFisicaService {
         return new DTOPessoaFisicaResponse(pessoaFisica);
     }
 
+
     public void inactivate(String id) {
 
         var pessoaFisica = pessoaFisicaRepository.getReferenceById(id);
