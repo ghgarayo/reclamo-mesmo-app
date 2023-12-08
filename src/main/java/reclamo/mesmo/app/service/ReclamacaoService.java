@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reclamo.mesmo.app.domain.reclamacao.EnumStatusReclamacao;
 import reclamo.mesmo.app.domain.reclamacao.Reclamacao;
+import reclamo.mesmo.app.domain.reclamacao.validacaoavaliacao.ValidadorNotaFinalReclamacao;
 import reclamo.mesmo.app.domain.reclamacao.validacaocriacao.ValidadorCriacaoReclamacao;
 import reclamo.mesmo.app.domain.reclamacao.validacaofechamento.ValidadorFechamentoReclamacao;
 import reclamo.mesmo.app.domain.reclamacao.validacaoresposta.ValidadorRespostaReclamacao;
@@ -23,13 +24,14 @@ public class ReclamacaoService {
     private ReclamacaoRepository reclamacaoRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
-
     @Autowired
     private List<ValidadorCriacaoReclamacao> validadoresDeCriacaoDeReclamacao;
     @Autowired
     private List<ValidadorRespostaReclamacao> validadoresDeRespostaDeReclamacao;
     @Autowired
     private List<ValidadorFechamentoReclamacao> validadoresDeFechamentoDeReclamacao;
+    @Autowired
+    private List<ValidadorNotaFinalReclamacao> validadoresDeNotaFinalReclamacao;
 
     public DTOReclamacaoRegistrationResponse register(String usuarioReclamanteId, String cpfCnpjReclamado, String descricaoReclamacao) {
 
@@ -42,18 +44,20 @@ public class ReclamacaoService {
         return new DTOReclamacaoRegistrationResponse(reclamacao);
     }
 
-    public DTOReclamacaoAnswerResponse answer(DTOReclamacaoAnswerRequest dto) {
+    public DTOReclamacaoAnswerResponse answer(String idReclamacao, String usuarioReclamadoId, String descricaoResposta) {
 
-        if (!reclamacaoRepository.existsById(dto.idReclamacao())) {
+        if (!reclamacaoRepository.existsById(idReclamacao)) {
             throw new ValidacaoException("Reclamação não encontrada");
         }
 
-        var reclamacao = reclamacaoRepository.getReferenceById(dto.idReclamacao());
-        var usuarioReclamado = usuarioRepository.getReferenceById(dto.usuarioReclamadoId());
+        validadoresDeRespostaDeReclamacao.forEach(validador -> validador.validar(idReclamacao, usuarioReclamadoId, descricaoResposta));
 
-        validadoresDeRespostaDeReclamacao.forEach(validador -> validador.validar(dto));
 
-        reclamacao.responder(dto, usuarioReclamado);
+        var reclamacao = reclamacaoRepository.getReferenceById(idReclamacao);
+        var usuarioReclamado = usuarioRepository.getReferenceById(usuarioReclamadoId);
+
+
+        reclamacao.responder(usuarioReclamado, descricaoResposta);
         reclamacaoRepository.save(reclamacao);
 
         return new DTOReclamacaoAnswerResponse(reclamacao);
@@ -73,21 +77,29 @@ public class ReclamacaoService {
 
     public void close(String idReclamacao, String usuarioId) {
 
-        var administrador = usuarioRepository.findByUsuarioIdAndIsAdmin(usuarioId, true);
-        var reclamacao = reclamacaoRepository.getReferenceById(idReclamacao);
-
-        if(administrador == null){
-            throw new ValidacaoException("Usuário não encontrado");
+        if (!reclamacaoRepository.existsById(idReclamacao)) {
+            throw new ValidacaoException("Reclamação não encontrada");
         }
-        validadoresDeFechamentoDeReclamacao.forEach(validador -> validador.validar(reclamacao, administrador));
+
+        validadoresDeFechamentoDeReclamacao.forEach(validador -> validador.validar(idReclamacao, usuarioId));
+
+        var reclamacao = reclamacaoRepository.getReferenceById(idReclamacao);
+        var administrador = usuarioRepository.findByUsuarioIdAndIsAdmin(usuarioId, true);
 
         reclamacao.fechar(administrador);
         reclamacaoRepository.save(reclamacao);
     }
 
     public void grade(String idReclamacao, Integer notaFinal) {
+
+        if (!reclamacaoRepository.existsById(idReclamacao)) {
+            throw new ValidacaoException("Reclamação não encontrada");
+        }
+
+        validadoresDeNotaFinalReclamacao.forEach(validador -> validador.validar(idReclamacao, notaFinal));
+
         var reclamacao = reclamacaoRepository.getReferenceById(idReclamacao);
-        reclamacao.avaliar(idReclamacao, notaFinal);
+        reclamacao.avaliar(notaFinal);
         reclamacaoRepository.save(reclamacao);
     }
 

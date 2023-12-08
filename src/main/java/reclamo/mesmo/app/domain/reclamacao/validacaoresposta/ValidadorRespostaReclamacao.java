@@ -1,7 +1,5 @@
 package reclamo.mesmo.app.domain.reclamacao.validacaoresposta;
 
-import reclamo.mesmo.app.dto.reclamacao.DTOReclamacaoAnswerRequest;
-
 public interface ValidadorRespostaReclamacao {
-    void validar(DTOReclamacaoAnswerRequest dto);
+    void validar(String idReclamacao, String usuarioReclamadoId, String descricaoResposta);
 }

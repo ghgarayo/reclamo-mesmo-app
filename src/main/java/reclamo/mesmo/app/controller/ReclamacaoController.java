@@ -35,8 +35,10 @@ public class ReclamacaoController {
 
     @PutMapping("/answer")
     @Transactional
-    public ResponseEntity<DTOReclamacaoAnswerResponse> answer(@RequestBody @Valid DTOReclamacaoAnswerRequest dto) {
-        var DTOReclamacao = reclamacaoService.answer(dto);
+    public ResponseEntity<DTOReclamacaoAnswerResponse> answer(@RequestBody @Valid DTOReclamacaoAnswer dto) {
+        var DTOReclamacao = reclamacaoService.answer(dto.idReclamacao(),
+                dto.usuarioReclamadoId(),
+                dto.descricaoResposta());
 
         return ResponseEntity.ok().body(DTOReclamacao);
     }
@@ -65,10 +67,17 @@ public class ReclamacaoController {
         return ResponseEntity.ok().body(DTOReclamacaoList);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/close")
     @Transactional
     public ResponseEntity<?> close(@RequestBody @Valid DTOReclamacaoClose dto) {
         reclamacaoService.close(dto.idReclamacao(), dto.usuarioId());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/grade")
+    @Transactional
+    public ResponseEntity<?> grade(@RequestBody @Valid DTOReclamacaoGrade dto) {
+        reclamacaoService.grade(dto.idReclamacao(), dto.notaFinal());
 
         return ResponseEntity.noContent().build();
     }

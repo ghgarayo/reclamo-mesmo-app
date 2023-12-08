@@ -11,7 +11,9 @@ public record DTOReclamacaoClosedList(String id,
                                      LocalDateTime dataReclamacao,
                                      Usuario usuarioReclamado,
                                      String descricaoResposta,
-                                     LocalDateTime dataResposta){
+                                     LocalDateTime dataResposta,
+                                      Integer notaFinal
+                                    ){
 
     public DTOReclamacaoClosedList(Reclamacao reclamacao){
         this(reclamacao.getId(),
@@ -20,6 +22,7 @@ public record DTOReclamacaoClosedList(String id,
                 reclamacao.getDataReclamacao(),
                 reclamacao.getUsuarioReclamado(),
                 reclamacao.getDescricaoResposta(),
-                reclamacao.getDataResposta());
+                reclamacao.getDataResposta(),
+                reclamacao.getNotaFinal());
     }
 }
