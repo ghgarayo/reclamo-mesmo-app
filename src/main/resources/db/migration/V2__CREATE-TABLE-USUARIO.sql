@@ -1,6 +1,6 @@
 CREATE TABLE usuarios (
     id VARCHAR(255) NOT NULL,
-    login VARCHAR(255) NOT NULL,
+    login VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
 
     PRIMARY KEY (id)

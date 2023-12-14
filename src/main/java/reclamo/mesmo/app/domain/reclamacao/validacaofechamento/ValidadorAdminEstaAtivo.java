@@ -23,7 +23,7 @@ public class ValidadorAdminEstaAtivo implements ValidadorFechamentoReclamacao{
         var isAdminActive = usuarioRepository.findByUsuarioIdAndIsActiveTrue(usuarioId);
 
         if (!isAdminActive.isAdmin()) {
-            throw new ValidacaoException("O administrador não está ativo");
+            throw new ValidacaoException("O usuário não é um administrador");
         }
 
     }

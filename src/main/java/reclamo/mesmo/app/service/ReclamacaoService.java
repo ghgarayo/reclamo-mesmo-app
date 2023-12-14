@@ -90,7 +90,7 @@ public class ReclamacaoService {
         reclamacaoRepository.save(reclamacao);
     }
 
-    public void grade(String idReclamacao, Integer notaFinal) {
+    public void avaliar(String idReclamacao, Integer notaFinal) {
 
         if (!reclamacaoRepository.existsById(idReclamacao)) {
             throw new ValidacaoException("Reclamação não encontrada");

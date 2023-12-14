@@ -77,7 +77,7 @@ public class ReclamacaoController {
     @PatchMapping("/grade")
     @Transactional
     public ResponseEntity<?> grade(@RequestBody @Valid DTOReclamacaoGrade dto) {
-        reclamacaoService.grade(dto.idReclamacao(), dto.notaFinal());
+        reclamacaoService.avaliar(dto.idReclamacao(), dto.notaFinal());
 
         return ResponseEntity.noContent().build();
     }

@@ -54,6 +54,6 @@ public class PessoaJuridicaService {
 
         var pessoaJuridica = repository.getReferenceById(id);
         pessoaJuridica.inativar();
-        repository.save(pessoaJuridica);
+
     }
 }

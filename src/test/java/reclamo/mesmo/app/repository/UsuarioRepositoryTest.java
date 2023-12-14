@@ -104,6 +104,8 @@ class UsuarioRepositoryTest {
 
         var usuario = usuarioRepository.findByUsuarioIdAndIsActiveTrue(pessoaFisica.getUsuario().getId());
 
+        assertThat(usuario).isNull();
+
     }
 
     @Test
@@ -118,6 +120,10 @@ class UsuarioRepositoryTest {
                 true);
 
         pessoaJuridicaService.inactivate(pessoaJuridica.getId());
+
+        var usuario = usuarioRepository.findByUsuarioIdAndIsActiveTrue(pessoaJuridica.getUsuario().getId());
+
+        assertThat(usuario).isNull();
     }
 
     private Usuario cadastrarUsuario(String login, String senha, Boolean isAdmin) {

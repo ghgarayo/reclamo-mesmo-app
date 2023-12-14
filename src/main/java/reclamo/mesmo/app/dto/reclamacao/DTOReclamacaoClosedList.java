@@ -6,10 +6,10 @@ import reclamo.mesmo.app.domain.usuario.Usuario;
 import java.time.LocalDateTime;
 
 public record DTOReclamacaoClosedList(String id,
-                                     Usuario usuarioReclamante,
+                                     String usuarioReclamante,
                                      String descricaoReclamacao,
                                      LocalDateTime dataReclamacao,
-                                     Usuario usuarioReclamado,
+                                     String usuarioReclamado,
                                      String descricaoResposta,
                                      LocalDateTime dataResposta,
                                       Integer notaFinal
@@ -17,10 +17,10 @@ public record DTOReclamacaoClosedList(String id,
 
     public DTOReclamacaoClosedList(Reclamacao reclamacao){
         this(reclamacao.getId(),
-                reclamacao.getUsuarioReclamante(),
+                reclamacao.getUsuarioReclamante().getId(),
                 reclamacao.getDescricaoReclamacao(),
                 reclamacao.getDataReclamacao(),
-                reclamacao.getUsuarioReclamado(),
+                reclamacao.getUsuarioReclamado().getId(),
                 reclamacao.getDescricaoResposta(),
                 reclamacao.getDataResposta(),
                 reclamacao.getNotaFinal());
